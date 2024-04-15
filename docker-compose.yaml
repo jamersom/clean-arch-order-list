@@ -1,44 +1,26 @@
 version: '3'
-services:
-  app:
-    build: .
-    ports:
-      - "8080:8000"
-      - "50051:50051"
-      - "8181:8181"
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
-      db:
-        condition: service_started
-  rabbitmq:
-    image: rabbitmq:3-management
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    healthcheck:
-      test: ["CMD", "rabbitmqctl", "status"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
 
-  db:
+services:
+  mysql:
     image: mysql:5.7
-    volumes:
-      - db_data:/var/lib/mysql
-      - ./path/to/init.sql:/docker-entrypoint-initdb.d/init.sql
+    container_name: mysql
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: orders
+      MYSQL_PASSWORD: root
     ports:
-      - "3306:3306"
-
-  evans:
-    image: ghcr.io/ktr0731/evans
-    depends_on:
-      - app
-    command: ["grpc", "--host", "app", "--port", "50051"]
+      - 3306:3306
     volumes:
-      - ./internal/infra/grpc/protofiles:/protofiles
-volumes:
-  db_data: {}
+      - .docker/mysql:/var/lib/mysql
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest

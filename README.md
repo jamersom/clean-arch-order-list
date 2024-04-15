@@ -35,7 +35,7 @@ docker-compose up
 - A aplicação agora deve estar acessível nos endereços:
 - [http://localhost:8181] - PlayGround GraphQL.
 - [http://localhost:8080] - Web API.
-- *evans repl -p 50051* - gRPC API.
+
 
 Para parar a aplicação, pressione *Ctrl+C* no terminal.
 
@@ -145,38 +145,11 @@ O docker-compose ja sobe um container com a imagem do Evans.
 
 Para realizar as chamadas usando o evans, basta rodar no terminal os comands abaixo a partir de qualquer diretorio:
 
-```bash
-docker-compose exec evans sh
 
-evans repl -p 50051
-
-package pb
-
-service OrderService
-```
-Isso selecionará o pacote pb que contém os serviços gRPC definidos e o serviço *OrderService*.
-
-*Chamando métodos do serviço OrderService*
-
-Para chamar métodos do serviço OrderService, como *DeleteOrder, UpdateOrder, CreateOrder, GetOrderByID e ListOrder*, siga o padrão abaixo, substituindo <método> pelo nome do método desejado e fornecendo os parâmetros necessários:
-
-```bash
-call <método>
-```
-Por exemplo, para enviar uma chamada para o método *DeleteOrder* com o parâmetro id definido como 111111111:
-
-```bash
-call DeleteOrder
-id (TYPE_STRING) => 111111111
-```
-
-Isso enviará uma chamada para o método DeleteOrder com o parâmetro id definido como 111111111.
-
-Para chamar outros métodos, basta substituir *DeleteOrder por UpdateOrder, CreateOrder, GetOrderByID ou ListOrder* no comando call.
 
 ## Interagindo com API HTTP/Web
 
-Além das interfaces *GraphQL* e *gRPC*, a aplicação também possui uma interface *HTTP/Web* para interação com os pedidos. Abaixo estão exemplos de como utilizar os endpoints HTTP:
+Interface *HTTP/Web* para interação com os pedidos. Abaixo estão exemplos de como utilizar os endpoints HTTP:
 
 **Criar um Novo Pedido**:
 
